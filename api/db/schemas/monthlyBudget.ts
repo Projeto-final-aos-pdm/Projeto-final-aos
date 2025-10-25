@@ -3,14 +3,14 @@ import {
     numeric,
     pgTable,
     timestamp,
-    integer,
-    serial,
+    uuid,
     varchar,
+    integer,
 } from "drizzle-orm/pg-core";
 import { userTable } from "./user";
 
 export const monthlyBudgetTable = pgTable("MonthlyBudget", {
-    id: serial('id').primaryKey(),
+    id: uuid('id').defaultRandom().primaryKey(),
     month: varchar('month', { length: 15 }).notNull(),
     year: integer('year').notNull(),
     limit_value: numeric('limit_value').notNull(),
@@ -18,7 +18,7 @@ export const monthlyBudgetTable = pgTable("MonthlyBudget", {
     created_at: timestamp('created_at').defaultNow().notNull(),
     updated_at: timestamp('updated_at')
         .$onUpdate(() => new Date()),
-    user_id: integer('user_id')
+    user_id: uuid('user_id')
         .notNull()
         .references(() => userTable.id),
 });
