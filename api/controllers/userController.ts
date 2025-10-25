@@ -1,141 +1,94 @@
 import type { Request, Response } from "express";
 import {
-  createUserService,
-  deleteUserByIdService,
-  getAllUsersService,
-  getUserByIdService,
-  updateUserByIdService,
+    createUserService,
+    deleteUserByIdService,
+    getUserByIdService,
+    updateUserByIdService,
 } from "../services/userService.js";
+import { userDTO } from "../dto/userDTO.js";
+import { ZodError } from "zod";
 
-const getAllUsers = async (req: Request, res: Response) => {
-  try {
-    const userList = await getAllUsersService();
+const signUp = async (req: Request, res: Response) => {
+    try {
+        const validatedData = userDTO.parse(req.body);
 
-    res.status(200).send({
-      message: "Requet sucessfully",
-      data: userList,
-    });
-  } catch (error) {
-    console.error(error);
+        const newUser = await createUserService(validatedData);
 
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
-  }
+        res.status(201).send({
+            message: "Usuário criado com sucesso! Faça login para continuar.",
+            data: newUser,
+        });
+    } catch (error: any) {
+        if (error instanceof ZodError) {
+            return res.status(400).send({
+                message: "Dados de entrada inválidos.",
+                errors: error.issues,
+            });
+        }
+        if (error.code === '23505') {
+            return res.status(409).send({ message: "O e-mail fornecido já está em uso." });
+        }
+
+        res.status(500).send({
+            message: "Erro interno do servidor ao criar usuário.",
+            erro: error.message,
+        });
+    }
 };
 
-const getUserById = async (req: Request, res: Response) => {
-  try {
-    const { userId } = req.params;
+const getUserProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.userId as string;
 
-    if (!userId) {
-      return res.status(400).send({
-        message: "Please insert userId",
-      });
+        const userData = await getUserByIdService(userId);
+
+        if (!userData) {
+            return res.status(404).send({ message: "Perfil de usuário não encontrado." });
+        }
+
+        res.status(200).send({
+            message: "Dados do perfil carregados com sucesso.",
+            data: userData,
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: "Erro interno do servidor ao buscar perfil.",
+            erro: error,
+        });
     }
-
-    const userData = await getUserByIdService(userId);
-
-    if (!userData) {
-      return res.status(404).send({
-        message: "User not found",
-      });
-    }
-
-    res.status(200).send({
-      message: "Request sucessfuly, user found!!",
-    });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
-  }
 };
 
-const createUser = async (req: Request, res: Response) => {
-  try {
-    const userData = await createUserService(req.body);
+const updateUserProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.userId as string;
+        const dataToUpdate = req.body; 
 
-    res.status(201).send({
-      message: "Request sucessfully, created user",
-      data: userData,
-    });
-  } catch (error) {
-    console.error(error);
+        await updateUserByIdService(userId, dataToUpdate);
 
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
-  }
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).send({
+            message: "Erro interno do servidor ao atualizar perfil.",
+            erro: error,
+        });
+    }
 };
 
-const updateUserById = async (req: Request, res: Response) => {
-  try {
-    const { userId } = req.params;
+const deleteUserProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.userId as string;
 
-    if (!userId) {
-      return res.status(400).send({
-        message: "Please insert userId",
-      });
+        await deleteUserByIdService(userId);
+
+        res.status(200).send({
+            message: "Conta de usuário deletada com sucesso.",
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: "Erro interno do servidor ao deletar conta.",
+            erro: error,
+        });
     }
-
-    const verifyUserExist = await getUserByIdService(userId);
-
-    if (!verifyUserExist) {
-      return res.status(404).send({
-        message: "User not found",
-      });
-    }
-
-    await updateUserByIdService(userId, req.body);
-
-    res.status(204).send();
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
-  }
 };
 
-const deleteUserById = async (req: Request, res: Response) => {
-  try {
-    const { userId } = req.params;
-
-    if (!userId) {
-      return res.status(400).send({
-        message: "Please insert userId",
-      });
-    }
-
-    const verifyUserExist = await getUserByIdService(userId);
-
-    if (!verifyUserExist) {
-      return res.status(404).send({
-        message: "User not found",
-      });
-    }
-
-    await deleteUserByIdService(userId);
-
-    res.status(200).send({
-      message: "Delete user sucessfully",
-    });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
-  }
-};
-
-export { createUser, deleteUserById, getAllUsers, getUserById, updateUserById };
+export { signUp, getUserProfile, updateUserProfile, deleteUserProfile };
