@@ -1,48 +1,34 @@
 import { relations } from "drizzle-orm";
 import {
-    date,
     numeric,
-    pgEnum,
     pgTable,
     timestamp,
-    integer,
-    serial,
+    uuid,
     varchar,
+    integer, 
 } from "drizzle-orm/pg-core";
-import { accountTable } from "./account";
-import { categoryTable } from "./category";
+import { userTable } from "./user";
 
-export const transactionType = ["income", "expense"] as const;
-export const transactionTypeEnum = pgEnum(
-    "transactionTypeEnum",
-    transactionType
-);
-export type TransactionType = (typeof transactionType)[number];
-
-export const transactionTable = pgTable("Transaction", {
-    id: serial('id').primaryKey(),
-    type: transactionTypeEnum('type').notNull(),
-    value: numeric('value').notNull(),
-    date: date('date', { mode: "string" }).notNull(),
-    description: varchar('description', { length: 255 }).notNull(),
+export const monthlyBudgetTable = pgTable("MonthlyBudget", {
+    id: uuid('id').defaultRandom().primaryKey(),
+    month: varchar('month', { length: 15 }).notNull(),
+    year: integer('year').notNull(),
+    limit_value: numeric('limit_value').notNull(),
+    spent_value: numeric('spent_value').default("0").notNull(),
     created_at: timestamp('created_at').defaultNow().notNull(),
     updated_at: timestamp('updated_at')
         .$onUpdate(() => new Date()),
-    account_id: integer('account_id')
+    user_id: uuid('user_id')
         .notNull()
-        .references(() => accountTable.id),
-    category_id: integer('category_id')
-        .notNull()
-        .references(() => categoryTable.id),
+        .references(() => userTable.id),
 });
 
-export const transactionRelations = relations(transactionTable, ({ one }) => ({
-    account: one(accountTable, {
-        fields: [transactionTable.account_id],
-        references: [accountTable.id],
-    }),
-    category: one(categoryTable, {
-        fields: [transactionTable.category_id],
-        references: [categoryTable.id],
-    }),
-}));
+export const monthlyBudgetRelations = relations(
+    monthlyBudgetTable,
+    ({ one }) => ({
+        user: one(userTable, {
+            fields: [monthlyBudgetTable.user_id],
+            references: [userTable.id],
+        }),
+    })
+);
