@@ -1,4 +1,5 @@
+import account from "./accountRouter.js";
+import auth from "./authenticationRouter.js";
 import user from "./userRoutes.js";
-import account from "./accountRouter.js"
 
-export default { user,account };
+export default { user, account, auth };
