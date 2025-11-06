@@ -17,3 +17,4 @@ server.get("/", (req, res) => {
 });
 
 server.use("/user", router.user);
+server.use("/account", router.account);
