@@ -1,94 +1,164 @@
+import bcrypt from "bcryptjs";
 import type { Request, Response } from "express";
-import {
-    createUserService,
-    deleteUserByIdService,
-    getUserByIdService,
-    updateUserByIdService,
-} from "../services/userService.js";
 import { userDTO } from "../dto/userDTO.js";
-import { ZodError } from "zod";
+import {
+  createUserService,
+  deleteUserByIdService,
+  getAllUsersService,
+  getUserByIdService,
+  updateUserByIdService,
+} from "../services/userService.js";
 
-const signUp = async (req: Request, res: Response) => {
-    try {
-        const validatedData = userDTO.parse(req.body);
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const userList = await getAllUsersService();
 
-        const newUser = await createUserService(validatedData);
+    res.status(200).send({
+      message: "Requet sucessfully",
+      data: userList,
+    });
+  } catch (error) {
+    console.error(error);
 
-        res.status(201).send({
-            message: "Usuário criado com sucesso! Faça login para continuar.",
-            data: newUser,
-        });
-    } catch (error: any) {
-        if (error instanceof ZodError) {
-            return res.status(400).send({
-                message: "Dados de entrada inválidos.",
-                errors: error.issues,
-            });
-        }
-        if (error.code === '23505') {
-            return res.status(409).send({ message: "O e-mail fornecido já está em uso." });
-        }
-
-        res.status(500).send({
-            message: "Erro interno do servidor ao criar usuário.",
-            erro: error.message,
-        });
-    }
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
 };
 
-const getUserProfile = async (req: Request, res: Response) => {
-    try {
-        const userId = req.userId as string;
+const getUserById = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
 
-        const userData = await getUserByIdService(userId);
-
-        if (!userData) {
-            return res.status(404).send({ message: "Perfil de usuário não encontrado." });
-        }
-
-        res.status(200).send({
-            message: "Dados do perfil carregados com sucesso.",
-            data: userData,
-        });
-    } catch (error) {
-        res.status(500).send({
-            message: "Erro interno do servidor ao buscar perfil.",
-            erro: error,
-        });
+    if (!userId) {
+      return res.status(400).send({
+        message: "Please insert userId",
+      });
     }
+
+    const userData = await getUserByIdService(userId);
+
+    if (!userData) {
+      return res.status(404).send({
+        message: "User not found",
+      });
+    }
+
+    res.status(200).send({
+      message: "Request sucessfuly, user found!!",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
 };
 
-const updateUserProfile = async (req: Request, res: Response) => {
-    try {
-        const userId = req.userId as string;
-        const dataToUpdate = req.body; 
+const createUser = async (req: Request, res: Response) => {
+  try {
+    const parsedData = userDTO.parse(req.body);
 
-        await updateUserByIdService(userId, dataToUpdate);
+    const hashedPassword = await bcrypt.hash(parsedData.password, 10);
 
-        res.status(204).send();
-    } catch (error) {
-        res.status(500).send({
-            message: "Erro interno do servidor ao atualizar perfil.",
-            erro: error,
-        });
-    }
+    const userDataWithHash = {
+      ...parsedData,
+      password: hashedPassword,
+    };
+
+    const userData = await createUserService(userDataWithHash);
+
+    res.status(201).send({
+      message: "Request sucessfully, created user",
+      data: userData,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
 };
 
-const deleteUserProfile = async (req: Request, res: Response) => {
-    try {
-        const userId = req.userId as string;
+const updateUserById = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
 
-        await deleteUserByIdService(userId);
-
-        res.status(200).send({
-            message: "Conta de usuário deletada com sucesso.",
-        });
-    } catch (error) {
-        res.status(500).send({
-            message: "Erro interno do servidor ao deletar conta.",
-            erro: error,
-        });
+    if (!userId) {
+      return res.status(400).send({
+        message: "Please insert userId",
+      });
     }
+
+    const verifyExistUserData = await getUserByIdService(userId);
+
+    if (!verifyExistUserData) {
+      return res.status(404).send({
+        message: "User not found",
+      });
+    }
+
+    const parsedData = userDTO.partial().parse(req.body);
+
+    let updateData = { ...parsedData };
+
+    if (parsedData.password !== undefined) {
+      const hashedPassword = await bcrypt.hash(parsedData.password, 10);
+      updateData = {
+        ...updateData,
+        password: hashedPassword,
+      };
+    }
+
+    await updateUserByIdService(userId, parsedData);
+
+    res.status(204).send();
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
 };
 
-export { signUp, getUserProfile, updateUserProfile, deleteUserProfile };
+const deleteUserById = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).send({
+        message: "Please insert userId",
+      });
+    }
+
+    const verifyExistUserData = await getUserByIdService(userId);
+
+    if (!verifyExistUserData) {
+      return res.status(404).send({
+        message: "User not found",
+      });
+    }
+
+    await deleteUserByIdService(userId);
+
+    res.status(200).send({
+      message: "Delete user sucessfully",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
+};
+
+export { createUser, deleteUserById, getAllUsers, getUserById, updateUserById };
