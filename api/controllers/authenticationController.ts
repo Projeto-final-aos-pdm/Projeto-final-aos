@@ -12,7 +12,7 @@ const authentication = async (req: Request, res: Response) => {
 
     if (!userData) {
       return res.status(404).send({
-        message: "User not found",
+        error: "Invalid email or password",
       });
     }
 
@@ -23,13 +23,13 @@ const authentication = async (req: Request, res: Response) => {
 
     if (!verifyPassword) {
       return res.status(401).send({
-        error: "Senha errada",
+        error: "Invalid email or password",
       });
     }
 
     if (!process.env.SECRET_KEY) {
       console.error("SECRET_KEY is not set!");
-      return res.status(500).json({
+      return res.status(500).send({
         error: "Server misconfigured",
       });
     }
