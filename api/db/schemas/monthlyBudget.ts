@@ -1,16 +1,27 @@
 import { relations } from "drizzle-orm";
-import {
-  numeric,
-  pgTable,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { numeric, pgEnum, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { userTable } from "./user";
+
+export const monthType = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+] as const;
+export const monthEnum = pgEnum("monthlyBudgetEnum", monthType);
+export type MonthType = (typeof monthType)[number];
 
 export const monthlyBudgetTable = pgTable("MonthlyBudget", {
   id: uuid().defaultRandom().primaryKey(),
-  month: varchar({ length: 15 }).notNull(),
+  month: monthEnum().notNull(),
   year: numeric().notNull(),
   limit_value: numeric().notNull(),
   spent_value: numeric().default("0").notNull(),
