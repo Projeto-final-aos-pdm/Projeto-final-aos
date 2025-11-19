@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { monthlyBudgetType } from "../dto/monthlyBudget";
+import { monthlyBudgetDTO } from "../dto/monthlyBudgetDTO";
 import {
   createMonthlyBudgetService,
   deleteMonthlyBudgetService,
@@ -60,7 +60,7 @@ const getMonthlyBudgetById = async (req: Request, res: Response) => {
 
 const createMonthlyBudget = async (req: Request, res: Response) => {
   try {
-    const parsedData = monthlyBudgetType.parse(req.body);
+    const parsedData = monthlyBudgetDTO.parse(req.body);
 
     const MonthlyBudgetData = createMonthlyBudgetService(parsedData);
 
@@ -97,7 +97,7 @@ const updateMonthlyBudget = async (req: Request, res: Response) => {
       });
     }
 
-    const parsedData = monthlyBudgetType.partial().parse(req.body);
+    const parsedData = monthlyBudgetDTO.partial().parse(req.body);
 
     const MonthlyBudgetData = updateMonthlyBudgetService(
       monthlyBudgetId,
