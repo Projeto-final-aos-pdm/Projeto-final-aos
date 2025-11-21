@@ -17,6 +17,8 @@ server.get("/", (req, res) => {
 });
 
 server.use("/user", router.user);
+server.use("/account", router.account);
+server.use("/transaction", router.transaction);
 server.use("/auth", router.auth);
 server.use("/financial-goal", router.financialGoal);
 server.use("/category", router.category);

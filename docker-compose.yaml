@@ -1,0 +1,21 @@
+# # docker-compose.yml
+# version: '3.8'
+
+# services:
+#   postgres:
+#     image: postgres:16-alpine   # versão leve e segura
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_USER: meuusuario
+#       POSTGRES_PASSWORD: minhasenhasegura123
+#       POSTGRES_DB: meubanco
+#     ports:
+#       - "5432:5432"             # expõe a porta 5432 do host
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#       # opcional: inicializar com scripts
+#       # - ./init-db:/docker-entrypoint-initdb.d
+
+# volumes:
+#   postgres_data:
+#     name: postgres_data
