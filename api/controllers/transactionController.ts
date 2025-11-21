@@ -62,6 +62,12 @@ const createTransaction = async (req: Request, res: Response) => {
 
     const transactionData = createTransactionService(parsedData);
 
+    if (!transactionData) {
+      return res.status(404).send({
+        message: "Transaction not found",
+      });
+    }
+
     res.status(201).send({
       message: "Request sucessfully, created transaction",
       data: transactionData,
@@ -85,6 +91,8 @@ const updateTransactionById = async (req: Request, res: Response) => {
       });
     }
 
+    
+
     const verifyTransactionExist = await getTransactionByIdService(
       transactionId
     );
@@ -96,6 +104,16 @@ const updateTransactionById = async (req: Request, res: Response) => {
     }
 
     const parsedData = transactionDTO.partial().parse(req.body);
+
+    const transactionData = await updateTransactionByIdService(
+      transactionId,
+      parsedData
+    );
+
+    res.status(200).send({
+      message: "Transaction updated",
+      data: transactionData,
+    });
 
     await updateTransactionByIdService(transactionId, parsedData);
   } catch (error) {

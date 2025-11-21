@@ -8,7 +8,7 @@ const getAllTransactionsService = async () => {
 };
 
 const getTransactionByIdService = async (transactionId: string) => {
-  return await database.query.financialGoalTable.findFirst({
+  return await database.query.transactionTable.findFirst({
     where: eq(transactionTable.id, transactionId),
   });
 };

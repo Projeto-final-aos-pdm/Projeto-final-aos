@@ -10,9 +10,9 @@ import {
 const router = Router();
 
 router.get("/", getAllTransaction);
-router.get("/:financialGoalId", getTransactionById);
+router.get("/:transactionId", getTransactionById);
 router.post("/", createTransaction);
-router.put("/:financialGoalId", updateTransactionById);
-router.delete("/:financialGoalId", deleteTransactionById);
+router.put("/:transactionId", updateTransactionById);
+router.delete("/:transactionId", deleteTransactionById);
 
 export default router;
