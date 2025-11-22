@@ -91,8 +91,6 @@ const updateTransactionById = async (req: Request, res: Response) => {
       });
     }
 
-    
-
     const verifyTransactionExist = await getTransactionByIdService(
       transactionId
     );
@@ -111,11 +109,9 @@ const updateTransactionById = async (req: Request, res: Response) => {
     );
 
     res.status(200).send({
-      message: "Transaction updated",
+      message: "Transaction updated sucessfully",
       data: transactionData,
     });
-
-    await updateTransactionByIdService(transactionId, parsedData);
   } catch (error) {
     console.error(error);
     res.status(500).send({

@@ -98,9 +98,15 @@ const updateFinancialGoalById = async (req: Request, res: Response) => {
     }
     const parsedData = financialGoalDTO.partial().parse(req.body);
 
-    await updateFinancialGoalByIdService(financialGoalId, parsedData);
+    const financialGoalData = await updateFinancialGoalByIdService(
+      financialGoalId,
+      parsedData
+    );
 
-    res.status(204).send();
+    res.status(200).send({
+      message: "Finan",
+      data: financialGoalData,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send({

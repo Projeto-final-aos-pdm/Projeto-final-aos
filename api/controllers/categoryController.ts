@@ -94,9 +94,15 @@ const updateCategoryById = async (req: Request, res: Response) => {
     }
     const parsedData = categoryDTO.partial().parse(req.body);
 
-    await updateCategoryByIdService(categoryId, parsedData);
+    const categoryData = await updateCategoryByIdService(
+      categoryId,
+      parsedData
+    );
 
-    res.status(204).send();
+    res.status(200).send({
+      message: "Category updated sucessfully",
+      data: categoryData,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send({

@@ -62,7 +62,7 @@ const createMonthlyBudget = async (req: Request, res: Response) => {
   try {
     const parsedData = monthlyBudgetDTO.parse(req.body);
 
-    const MonthlyBudgetData = createMonthlyBudgetService(parsedData);
+    const MonthlyBudgetData = await createMonthlyBudgetService(parsedData);
 
     res.status(201).send({
       message: "Request sucessfully, created MonthlyBudget",
@@ -99,7 +99,7 @@ const updateMonthlyBudget = async (req: Request, res: Response) => {
 
     const parsedData = monthlyBudgetDTO.partial().parse(req.body);
 
-    const MonthlyBudgetData = updateMonthlyBudgetService(
+    const MonthlyBudgetData = await updateMonthlyBudgetService(
       monthlyBudgetId,
       parsedData
     );

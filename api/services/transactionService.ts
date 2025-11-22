@@ -4,7 +4,7 @@ import { transactionTable } from "../db/schemas/transaction.js";
 import type { TransactionDTO } from "../dto/transationDTO.js";
 
 const getAllTransactionsService = async () => {
-  return await database.query.financialGoalTable.findMany();
+  return await database.query.transactionTable.findMany();
 };
 
 const getTransactionByIdService = async (transactionId: string) => {

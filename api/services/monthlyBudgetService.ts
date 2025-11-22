@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { database } from "../db/index.js";
 import { monthlyBudgetTable } from "../db/schemas/monthlyBudget.js";
-import type { MonthlyBudgetType } from "../dto/monthlyBudget.js";
+import type { MonthlyBudgetDTO } from "../dto/monthlyBudgetDTO.js";
 
 const getAllMonthlyBudgetService = async () => {
   return await database.query.monthlyBudgetTable.findMany();
@@ -13,18 +13,19 @@ const getMonthlyBudgetByIdService = async (monthlyBudgetId: string) => {
   });
 };
 
-const createMonthlyBudgetService = async (data: MonthlyBudgetType) => {
+const createMonthlyBudgetService = async (data: MonthlyBudgetDTO) => {
   return await database.insert(monthlyBudgetTable).values(data).returning();
 };
 
 const updateMonthlyBudgetService = async (
   monthlyBudgetId: string,
-  data: Partial<MonthlyBudgetType>
+  data: Partial<MonthlyBudgetDTO>
 ) => {
   return await database
     .update(monthlyBudgetTable)
     .set(data)
-    .where(eq(monthlyBudgetTable.id, monthlyBudgetId));
+    .where(eq(monthlyBudgetTable.id, monthlyBudgetId))
+    .returning();
 };
 
 const deleteMonthlyBudgetService = async (monthlyBudgetId: string) => {
