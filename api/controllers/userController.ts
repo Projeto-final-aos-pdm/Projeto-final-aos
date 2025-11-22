@@ -115,9 +115,12 @@ const updateUserById = async (req: Request, res: Response) => {
       };
     }
 
-    await updateUserByIdService(userId, parsedData);
+    const userData = await updateUserByIdService(userId, parsedData);
 
-    res.status(204).send();
+    res.status(200).send({
+      message: "User updated sucessfully",
+      data: userData,
+    });
   } catch (error) {
     console.error(error);
 
