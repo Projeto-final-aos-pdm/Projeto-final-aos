@@ -1,87 +1,55 @@
-import { eq, and } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { database } from "../db/index.js";
 import { accountTable } from "../db/schemas/account.js";
-import { transactionTable } from "../db/schemas/transaction.js"; // Para deletar transações
-import type { AccountDTO, UpdateAccountDTO } from "../dto/accountDTO.js";
+import type { AccountDTO } from "../dto/accountDTO.js";
 
-/**
- * @param userId
- */
-const getAllAccountsService = async (userId: string) => {
-    return await database.query.accountTable.findMany({
-        where: eq(accountTable.user_id, userId),
-    });
+const getAllAccountsService = async () => {
+  return await database.query.accountTable.findMany();
 };
 
-/**
- * @param accountId 
- * @param userId 
- */
-const getAccountByIdService = async (accountId: string, userId: string) => {
-    return await database.query.accountTable.findFirst({
-        where: and(
-            eq(accountTable.id, accountId),
-            eq(accountTable.user_id, userId)
-        ),
-    });
+const getAccountByIdService = async (accountId: string) => {
+  return await database.query.accountTable.findFirst({
+    where: eq(accountTable.id, accountId),
+  });
 };
 
-/**
- * @param data 
- * @param userId 
- */
 const createAccountService = async (data: AccountDTO, userId: string) => {
-    const newAccount = await database.insert(accountTable).values({
-        ...data,
-        user_id: userId,
-    }).returning();
-    
-    return newAccount[0];
+  return await database
+    .insert(accountTable)
+    .values({
+      ...data,
+      user_id: userId,
+    })
+    .returning();
 };
 
-/**
- * @param accountId 
- * @param userId 
- * @param data 
- */
 const updateAccountService = async (
-    accountId: string,
-    userId: string,
-    data: UpdateAccountDTO
+  accountId: string,
+  userId: string,
+  data: Partial<AccountDTO>
 ) => {
-    return await database
-        .update(accountTable)
-        .set(data)
-        .where(and( 
-            eq(accountTable.id, accountId),
-            eq(accountTable.user_id, userId)
-        ))
-        .returning();
+  return await database
+    .update(accountTable)
+    .set(data)
+    .where(
+      and(eq(accountTable.id, accountId), eq(accountTable.user_id, userId))
+    )
+    .returning();
 };
 
-/**
- * @param accountId 
- * @param userId 
- */
-const deleteAccountService = async (accountId: string, userId: string) => {
-    
-    const account = await getAccountByIdService(accountId, userId);
-    if (!account) {
-        throw new Error("Conta não encontrada ou acesso negado.");
-    }
-
-    await database.delete(transactionTable).where(eq(transactionTable.account_id, accountId));
-
-    return await database
-        .delete(accountTable)
-        .where(eq(accountTable.id, accountId))
-        .returning();
+const deleteAccountService = async (accountId: string) => {
+  return await database
+    .delete(accountTable)
+    .where(eq(accountTable.id, accountId));
 };
+
+/*
+Pegar todas as transações de uma conta*/
 
 export {
-    getAllAccountsService,
-    getAccountByIdService,
-    createAccountService,
-    updateAccountService,
-    deleteAccountService,
+  createAccountService,
+  deleteAccountService,
+  getAccountByIdService,
+  getAllAccountsService,
+  updateAccountService,
 };

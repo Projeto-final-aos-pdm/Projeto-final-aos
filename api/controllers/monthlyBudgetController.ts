@@ -27,13 +27,7 @@ const getAllMonthlyBudget = async (req: Request, res: Response) => {
 
 const getMonthlyBudgetById = async (req: Request, res: Response) => {
   try {
-    const { monthlyBudgetId } = req.params;
-
-    if (!monthlyBudgetId) {
-      return res.status(400).send({
-        message: "Please insert monthlyBudgetId",
-      });
-    }
+    const monthlyBudgetId = req.params.monthlyBudgetId!;
 
     const monthlyBudgetData = await getMonthlyBudgetByIdService(
       monthlyBudgetId
@@ -60,9 +54,14 @@ const getMonthlyBudgetById = async (req: Request, res: Response) => {
 
 const createMonthlyBudget = async (req: Request, res: Response) => {
   try {
+    const userId = req.params.userId!;
+
     const parsedData = monthlyBudgetDTO.parse(req.body);
 
-    const MonthlyBudgetData = await createMonthlyBudgetService(parsedData);
+    const MonthlyBudgetData = await createMonthlyBudgetService(
+      parsedData,
+      userId
+    );
 
     res.status(201).send({
       message: "Request sucessfully, created MonthlyBudget",
@@ -79,13 +78,9 @@ const createMonthlyBudget = async (req: Request, res: Response) => {
 
 const updateMonthlyBudget = async (req: Request, res: Response) => {
   try {
-    const { monthlyBudgetId } = req.params;
+    const userId = req.params.userId!;
 
-    if (!monthlyBudgetId) {
-      return res.status(400).send({
-        message: "Please insert monthlyBudgetId",
-      });
-    }
+    const monthlyBudgetId = req.params.monthlyBudgetId!;
 
     const VerifymonthlyBudgetExist = await getMonthlyBudgetByIdService(
       monthlyBudgetId
@@ -101,7 +96,8 @@ const updateMonthlyBudget = async (req: Request, res: Response) => {
 
     const MonthlyBudgetData = await updateMonthlyBudgetService(
       monthlyBudgetId,
-      parsedData
+      parsedData,
+      userId
     );
 
     res.status(200).send({
@@ -119,13 +115,9 @@ const updateMonthlyBudget = async (req: Request, res: Response) => {
 
 const deleteMonthlyBudget = async (req: Request, res: Response) => {
   try {
-    const { monthlyBudgetId } = req.params;
+    const userId = req.params.userId!;
 
-    if (!monthlyBudgetId) {
-      return res.status(400).send({
-        message: "Please insert monthlyBudgetId",
-      });
-    }
+    const monthlyBudgetId = req.params.monthlyBudgetId!;
 
     const VerifymonthlyBudgetExist = await getMonthlyBudgetByIdService(
       monthlyBudgetId

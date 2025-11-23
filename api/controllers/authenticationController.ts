@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { authenticationDTO } from "../dto/authenticationDTO.js";
+import env from "../env.js";
 import { getUserByEmail } from "../services/userService.js";
 
 const authentication = async (req: Request, res: Response) => {
@@ -36,7 +37,7 @@ const authentication = async (req: Request, res: Response) => {
 
     const token = jwt.sign(
       { userId: userData.id, userEmail: userData.email },
-      process.env.SECRET_KEY,
+      env.SECRET_KEY,
       {
         expiresIn: "4h",
       }

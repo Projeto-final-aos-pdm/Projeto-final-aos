@@ -1,5 +1,5 @@
 {
-  "id": "020a0fed-3bb8-4666-8d78-a8f1d170c15b",
+  "id": "66429f97-c16d-4f35-868f-bc9c92eb38ad",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -15,9 +15,23 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "balance": {
+          "name": "balance",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0.00'"
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
         "bank": {
           "name": "bank",
-          "type": "varchar",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
         },
@@ -39,8 +53,7 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "user_id": {
           "name": "user_id",
@@ -61,8 +74,8 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -187,8 +200,8 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -210,7 +223,8 @@
         },
         "month": {
           "name": "month",
-          "type": "varchar(15)",
+          "type": "monthlyBudgetEnum",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -266,8 +280,8 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -351,8 +365,8 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         },
         "Transaction_category_id_Category_id_fk": {
           "name": "Transaction_category_id_Category_id_fk",
@@ -365,7 +379,7 @@
             "id"
           ],
           "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -453,6 +467,24 @@
       "values": [
         "fix",
         "variable"
+      ]
+    },
+    "public.monthlyBudgetEnum": {
+      "name": "monthlyBudgetEnum",
+      "schema": "public",
+      "values": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
       ]
     },
     "public.transactionTypeEnum": {

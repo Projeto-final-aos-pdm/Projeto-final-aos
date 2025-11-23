@@ -1,2 +1,0 @@
-CREATE TYPE "public"."monthlyBudgetEnum" AS ENUM('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');--> statement-breakpoint
-ALTER TABLE "MonthlyBudget" ALTER COLUMN "month" SET DATA TYPE "public"."monthlyBudgetEnum" USING "month"::"public"."monthlyBudgetEnum";

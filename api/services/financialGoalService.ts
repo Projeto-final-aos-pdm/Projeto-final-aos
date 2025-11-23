@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { database } from "../db/index.js";
 import { financialGoalTable } from "../db/schemas/financialGoal.js";
 import type { FinancialGoalDTO } from "../dto/financialGoalDTO.js";
@@ -13,22 +13,37 @@ const getFinancialGoalByIdService = async (financialGoalId: string) => {
   });
 };
 
-const createFinancialGoalService = async (data: FinancialGoalDTO) => {
-  return await database.insert(financialGoalTable).values(data).returning();
+const createFinancialGoalService = async (
+  data: FinancialGoalDTO,
+  userId: string
+) => {
+  return await database
+    .insert(financialGoalTable)
+    .values({ ...data, user_id: userId })
+    .returning();
 };
 
 const updateFinancialGoalByIdService = async (
   financialGoalId: string,
-  data: Partial<FinancialGoalDTO>
+  data: Partial<FinancialGoalDTO>,
+  userId: string
 ) => {
   return await database
     .update(financialGoalTable)
-    .set(data)
-    .where(eq(financialGoalTable.id, financialGoalId))
+    .set({ ...data, user_id: userId })
+    .where(
+      and(
+        eq(financialGoalTable.id, financialGoalId),
+        eq(financialGoalTable.user_id, userId)
+      )
+    )
     .returning();
 };
 
-const deleteFinancialGoalService = async (financialGoalId: string) => {
+const deleteFinancialGoalService = async (
+  financialGoalId: string,
+  userId: string
+) => {
   return await database
     .delete(financialGoalTable)
     .where(eq(financialGoalTable.id, financialGoalId));
