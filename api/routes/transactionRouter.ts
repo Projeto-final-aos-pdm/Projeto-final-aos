@@ -6,8 +6,11 @@ import {
   getTransactionById,
   updateTransactionById,
 } from "../controllers/transactionController";
+import { authMiddleware } from "../middlewares/authMiddleware";
+import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware";
 
 const router = Router();
+router.use(authMiddleware, isOwerMiddleware);
 
 router.get("/", getAllTransaction);
 router.get("/:transactionId", getTransactionById);

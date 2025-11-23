@@ -10,7 +10,9 @@ import {
 
 const getAllFinancialGoal = async (req: Request, res: Response) => {
   try {
-    const financialGoalList = await getAllFinalcialGoalsService();
+    const userId = req.params.userId!;
+
+    const financialGoalList = await getAllFinalcialGoalsService(userId);
 
     res.status(200).send({
       message: "Request sucessfully",
@@ -27,16 +29,13 @@ const getAllFinancialGoal = async (req: Request, res: Response) => {
 
 const getFinancialGoalById = async (req: Request, res: Response) => {
   try {
-    const { financialGoalId } = req.params;
+    const userId = req.params.userId!;
 
-    if (!financialGoalId) {
-      return res.status(400).send({
-        message: "Please insert financial goal id",
-      });
-    }
+    const financialGoalId = req.params.financialGoalId!;
 
     const financialGoalData = await getFinancialGoalByIdService(
-      financialGoalId
+      financialGoalId,
+      userId
     );
 
     if (!financialGoalData) {
@@ -60,9 +59,14 @@ const getFinancialGoalById = async (req: Request, res: Response) => {
 
 const createFinancialGoal = async (req: Request, res: Response) => {
   try {
+    const userId = req.params.userId!;
+
     const parsedData = financialGoalDTO.parse(req.body);
 
-    const financialGoalData = await createFinancialGoalService(parsedData);
+    const financialGoalData = await createFinancialGoalService(
+      parsedData,
+      userId
+    );
 
     res.status(201).send({
       message: "Request sucessfully, financial goal created",
@@ -79,16 +83,13 @@ const createFinancialGoal = async (req: Request, res: Response) => {
 
 const updateFinancialGoalById = async (req: Request, res: Response) => {
   try {
-    const { financialGoalId } = req.params;
+    const userId = req.params.userId!;
 
-    if (!financialGoalId) {
-      return res.status(400).send({
-        message: "Please insert financial goal id",
-      });
-    }
+    const financialGoalId = req.params.financialGoalId!;
 
     const verifyExistFinancialGoalData = await getFinancialGoalByIdService(
-      financialGoalId
+      financialGoalId,
+      userId
     );
 
     if (!verifyExistFinancialGoalData) {
@@ -100,7 +101,8 @@ const updateFinancialGoalById = async (req: Request, res: Response) => {
 
     const financialGoalData = await updateFinancialGoalByIdService(
       financialGoalId,
-      parsedData
+      parsedData,
+      userId
     );
 
     res.status(200).send({
@@ -118,16 +120,13 @@ const updateFinancialGoalById = async (req: Request, res: Response) => {
 
 const deleteFinancialGoalById = async (req: Request, res: Response) => {
   try {
-    const { financialGoalId } = req.params;
+    const userId = req.params.userId!;
 
-    if (!financialGoalId) {
-      return res.status(400).send({
-        message: "Please insert financial goal id",
-      });
-    }
+    const financialGoalId = req.params.financialGoalId!;
 
     const verifyExistFinancialGoalData = await getFinancialGoalByIdService(
-      financialGoalId
+      financialGoalId,
+      userId
     );
 
     if (!verifyExistFinancialGoalData) {
@@ -136,7 +135,7 @@ const deleteFinancialGoalById = async (req: Request, res: Response) => {
       });
     }
 
-    await deleteFinancialGoalService(financialGoalId);
+    await deleteFinancialGoalService(financialGoalId, userId);
 
     res.status(200).send({
       message: "Request sucessfully, financial goal deleted",
