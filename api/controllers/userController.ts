@@ -4,7 +4,13 @@ import { userDTO } from "../dto/userDTO.js";
 import {
   createUserService,
   deleteUserByIdService,
+  getAccountByIdAndUserIdService,
+  getAllAccountsByUserIdService,
+  getAllFinancialGoalsByUserIdService,
+  getAllMonthlyBudgetByUserIdService,
   getAllUsersService,
+  getFinancialGoalByIdAndUserIdService,
+  getMonthlyBudgetByIdAndUserIdService,
   getUserByIdService,
   updateUserByIdService,
 } from "../services/userService.js";
@@ -29,13 +35,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 
 const getUserById = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
-
-    if (!userId) {
-      return res.status(400).send({
-        message: "Please insert userId",
-      });
-    }
+    const userId = req.params.userId!;
 
     const userData = await getUserByIdService(userId);
 
@@ -87,13 +87,7 @@ const createUser = async (req: Request, res: Response) => {
 
 const updateUserById = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
-
-    if (!userId) {
-      return res.status(400).send({
-        message: "Please insert userId",
-      });
-    }
+    const userId = req.params.userId!;
 
     const verifyExistUserData = await getUserByIdService(userId);
 
@@ -133,13 +127,7 @@ const updateUserById = async (req: Request, res: Response) => {
 
 const deleteUserById = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
-
-    if (!userId) {
-      return res.status(400).send({
-        message: "Please insert userId",
-      });
-    }
+    const userId = req.params.userId!;
 
     const verifyExistUserData = await getUserByIdService(userId);
 
@@ -164,4 +152,151 @@ const deleteUserById = async (req: Request, res: Response) => {
   }
 };
 
-export { createUser, deleteUserById, getAllUsers, getUserById, updateUserById };
+const getAllAccountsByUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId!;
+
+    const accountsList = await getAllAccountsByUserIdService(userId);
+
+    res.status(200).send({
+      message: "Requet sucessfully",
+      data: accountsList,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
+};
+
+const getAccountByIdAndUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId!;
+    const accountId = req.params.accountId!;
+
+    const accountData = await getAccountByIdAndUserIdService(userId, accountId);
+
+    if (!accountData) {
+      return res.status(400).send({
+        message: "Account not found",
+      });
+    }
+
+    res.status(200).send({
+      message: "Request sucessfully, account found",
+      data: accountData,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
+};
+
+const getAllFinancialGoalsByUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId!;
+
+    const financialGoalList = await getAllFinancialGoalsByUserIdService(userId);
+
+    res.status(200).send({
+      message: "Request sucessfully, financial goal found",
+      data: financialGoalList,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
+};
+
+const getFinancialGoalByIdAndUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId!;
+    const financialGoalId = req.params.financialGoalId!;
+
+    const financialGoalData = await getFinancialGoalByIdAndUserIdService(
+      userId,
+      financialGoalId
+    );
+
+    res.status(200).send({
+      message: "Request sucessfully, financial goal found",
+      data: financialGoalData,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
+};
+
+const getAllMonthlyBudgetByUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId!;
+
+    const monthlyBudgetList = await getAllMonthlyBudgetByUserIdService(userId);
+
+    res.status(200).send({
+      message: "Request sucessfully, monthly budget found",
+      data: monthlyBudgetList,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
+};
+
+const getMonthlyBudgetByIdAndUserId = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId!;
+    const monthlyBudgetId = req.params.monthlyBudgetId!;
+
+    const monthlyBudgetData = await getMonthlyBudgetByIdAndUserIdService(
+      userId,
+      monthlyBudgetId
+    );
+
+    res.status(200).send({
+      message: "Request sucessfully, monthly budget found",
+      data: monthlyBudgetData,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
+};
+
+export {
+  createUser,
+  deleteUserById,
+  getAccountByIdAndUserId,
+  getAllAccountsByUserId,
+  getAllFinancialGoalsByUserId,
+  getAllMonthlyBudgetByUserId,
+  getAllUsers,
+  getFinancialGoalByIdAndUserId,
+  getMonthlyBudgetByIdAndUserId,
+  getUserById,
+  updateUserById,
+};

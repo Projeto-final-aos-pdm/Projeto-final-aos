@@ -31,7 +31,10 @@ export const monthlyBudgetTable = pgTable("MonthlyBudget", {
     .$onUpdate(() => new Date()),
   user_id: uuid()
     .notNull()
-    .references(() => userTable.id),
+    .references(() => userTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
 });
 
 export const monthlyBudgetRelations = relations(

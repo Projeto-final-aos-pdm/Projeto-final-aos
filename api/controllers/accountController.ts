@@ -11,9 +11,7 @@ import {
 
 const getAllAccounts = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId!;
-
-    const accounts = await getAllAccountsService(userId);
+    const accounts = await getAllAccountsService();
 
     res.status(200).send({
       message: "Contas listadas com sucesso.",
@@ -26,10 +24,9 @@ const getAllAccounts = async (req: Request, res: Response) => {
 
 const getAccountById = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId!;
     const accountId = req.params.accountId!;
 
-    const account = await getAccountByIdService(accountId, userId);
+    const account = await getAccountByIdService(accountId);
 
     if (!account) {
       return res
@@ -81,7 +78,7 @@ const updateAccount = async (req: Request, res: Response) => {
         .send({ message: "Nenhum dado fornecido para atualização." });
     }
 
-    const verifyAccountExist = await getAccountByIdService(accountId, userId);
+    const verifyAccountExist = await getAccountByIdService(accountId);
 
     if (!verifyAccountExist) {
       return res.status(404).send({
@@ -115,7 +112,7 @@ const deleteAccount = async (req: Request, res: Response) => {
     const userId = req.userId as string;
     const accountId = req.params.accountId as string;
 
-    const verifyAccountExist = await getAccountByIdService(accountId, userId);
+    const verifyAccountExist = await getAccountByIdService(accountId);
 
     if (!verifyAccountExist) {
       return res.status(404).send({

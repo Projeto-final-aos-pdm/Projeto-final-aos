@@ -13,41 +13,24 @@ import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware.js";
 
 const router = Router();
 
-router.use(authMiddleware, isOwerMiddleware);
+router.get("/", getAllAccounts);
 
 router.get(
-  "/user/:userId",
-  validateRequest({
-    params: z.object({
-      userId: z.string().uuid(),
-    }),
-  }),
-  getAllAccounts
-);
-
-router.get(
-  "/:accountId/user/:userId",
+  "/:accountId",
   validateRequest({
     params: z.object({
       accountId: z.string().uuid(),
-      userId: z.string().uuid(),
     }),
   }),
   getAccountById
 );
 
-router.post(
-  "/user/:userId",
-  validateRequest({
-    params: z.object({
-      userId: z.string().uuid(),
-    }),
-  }),
-  createAccount
-);
+router.post("/user/:userId", authMiddleware, createAccount);
 
 router.put(
-  ":accountId/user/:userId",
+  "/:accountId/user/:userId",
+  authMiddleware,
+  isOwerMiddleware,
   validateRequest({
     params: z.object({
       accountId: z.string().uuid(),
@@ -59,6 +42,8 @@ router.put(
 
 router.delete(
   ":accountId/user/:userId",
+  authMiddleware,
+  isOwerMiddleware,
   validateRequest({
     params: z.object({
       accountId: z.string().uuid(),

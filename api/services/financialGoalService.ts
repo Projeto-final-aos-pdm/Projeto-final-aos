@@ -3,21 +3,13 @@ import { database } from "../db/index.js";
 import { financialGoalTable } from "../db/schemas/financialGoal.js";
 import type { FinancialGoalDTO } from "../dto/financialGoalDTO.js";
 
-const getAllFinalcialGoalsService = async (userId: string) => {
-  return await database.query.financialGoalTable.findMany({
-    where: eq(financialGoalTable.user_id, userId),
-  });
+const getAllFinalcialGoalsService = async () => {
+  return await database.query.financialGoalTable.findMany();
 };
 
-const getFinancialGoalByIdService = async (
-  financialGoalId: string,
-  userId: string
-) => {
+const getFinancialGoalByIdService = async (financialGoalId: string) => {
   return await database.query.financialGoalTable.findFirst({
-    where: and(
-      eq(financialGoalTable.id, financialGoalId),
-      eq(financialGoalTable.user_id, userId)
-    ),
+    where: eq(financialGoalTable.id, financialGoalId),
   });
 };
 

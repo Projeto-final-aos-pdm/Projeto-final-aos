@@ -10,9 +10,7 @@ import {
 
 const getAllMonthlyBudget = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId!;
-
-    const monthlyBudgetList = await getAllMonthlyBudgetService(userId);
+    const monthlyBudgetList = await getAllMonthlyBudgetService();
 
     res.status(200).send({
       message: "Requet sucessfully",
@@ -29,13 +27,10 @@ const getAllMonthlyBudget = async (req: Request, res: Response) => {
 
 const getMonthlyBudgetById = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId!;
-
     const monthlyBudgetId = req.params.monthlyBudgetId!;
 
     const monthlyBudgetData = await getMonthlyBudgetByIdService(
-      monthlyBudgetId,
-      userId
+      monthlyBudgetId
     );
 
     if (!monthlyBudgetData) {
@@ -88,8 +83,7 @@ const updateMonthlyBudget = async (req: Request, res: Response) => {
     const monthlyBudgetId = req.params.monthlyBudgetId!;
 
     const VerifymonthlyBudgetExist = await getMonthlyBudgetByIdService(
-      monthlyBudgetId,
-      userId
+      monthlyBudgetId
     );
 
     if (!VerifymonthlyBudgetExist) {
@@ -126,8 +120,7 @@ const deleteMonthlyBudget = async (req: Request, res: Response) => {
     const monthlyBudgetId = req.params.monthlyBudgetId!;
 
     const VerifymonthlyBudgetExist = await getMonthlyBudgetByIdService(
-      monthlyBudgetId,
-      userId
+      monthlyBudgetId
     );
 
     if (!VerifymonthlyBudgetExist) {

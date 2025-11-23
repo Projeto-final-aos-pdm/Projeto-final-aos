@@ -3,21 +3,13 @@ import { database } from "../db/index.js";
 import { monthlyBudgetTable } from "../db/schemas/monthlyBudget.js";
 import type { MonthlyBudgetDTO } from "../dto/monthlyBudgetDTO.js";
 
-const getAllMonthlyBudgetService = async (userId: string) => {
-  return await database.query.monthlyBudgetTable.findMany({
-    where: eq(monthlyBudgetTable.user_id, userId),
-  });
+const getAllMonthlyBudgetService = async () => {
+  return await database.query.monthlyBudgetTable.findMany();
 };
 
-const getMonthlyBudgetByIdService = async (
-  monthlyBudgetId: string,
-  userId: string
-) => {
+const getMonthlyBudgetByIdService = async (monthlyBudgetId: string) => {
   return await database.query.monthlyBudgetTable.findFirst({
-    where: and(
-      eq(monthlyBudgetTable.id, monthlyBudgetId),
-      eq(monthlyBudgetTable.user_id, userId)
-    ),
+    where: eq(monthlyBudgetTable.id, monthlyBudgetId),
   });
 };
 

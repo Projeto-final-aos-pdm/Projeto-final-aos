@@ -3,18 +3,13 @@ import { database } from "../db/index.js";
 import { accountTable } from "../db/schemas/account.js";
 import type { AccountDTO } from "../dto/accountDTO.js";
 
-const getAllAccountsService = async (userId: string) => {
-  return await database.query.accountTable.findMany({
-    where: eq(accountTable.user_id, userId),
-  });
+const getAllAccountsService = async () => {
+  return await database.query.accountTable.findMany();
 };
 
-const getAccountByIdService = async (accountId: string, userId: string) => {
+const getAccountByIdService = async (accountId: string) => {
   return await database.query.accountTable.findFirst({
-    where: and(
-      eq(accountTable.id, accountId),
-      eq(accountTable.user_id, userId)
-    ),
+    where: eq(accountTable.id, accountId),
   });
 };
 
@@ -47,6 +42,9 @@ const deleteAccountService = async (accountId: string) => {
     .delete(accountTable)
     .where(eq(accountTable.id, accountId));
 };
+
+/*
+Pegar todas as transações de uma conta*/
 
 export {
   createAccountService,

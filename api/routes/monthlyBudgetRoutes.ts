@@ -13,23 +13,12 @@ import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware";
 
 const router = Router();
 
-router.use(authMiddleware, isOwerMiddleware);
+router.get("/", getAllMonthlyBudget);
 
 router.get(
-  "/user/:userId",
+  "/:monthlyBudgetId",
   validateRequest({
     params: z.object({
-      userId: z.string().uuid(),
-    }),
-  }),
-  getAllMonthlyBudget
-);
-
-router.get(
-  "/:monthlyBudgetId/user/:userId",
-  validateRequest({
-    params: z.object({
-      userId: z.string().uuid(),
       monthlyBudgetId: z.string().uuid(),
     }),
   }),
@@ -38,6 +27,7 @@ router.get(
 
 router.post(
   "/user/:userId",
+  authMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -48,10 +38,12 @@ router.post(
 
 router.put(
   "/:monthlyBudgetId/user/:userId",
+  authMiddleware,
+  isOwerMiddleware,
   validateRequest({
     params: z.object({
-      userId: z.string().uuid(),
       monthlyBudgetId: z.string().uuid(),
+      userId: z.string().uuid(),
     }),
   }),
   updateMonthlyBudget
@@ -61,8 +53,8 @@ router.delete(
   "/:monthlyBudgetId/user/:userId",
   validateRequest({
     params: z.object({
-      userId: z.string().uuid(),
       monthlyBudgetId: z.string().uuid(),
+      userId: z.string().uuid(),
     }),
   }),
   deleteMonthlyBudget

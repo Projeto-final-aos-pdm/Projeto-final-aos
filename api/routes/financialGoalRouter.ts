@@ -13,56 +13,43 @@ import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware.js";
 
 const router = Router();
 
-router.use(authMiddleware, isOwerMiddleware);
+router.get("/", getAllFinancialGoal);
 
 router.get(
-  "/user/:userId",
+  "/:financialGoalId",
   validateRequest({
     params: z.object({
-      userId: z.string().uuid(),
-    }),
-  }),
-  getAllFinancialGoal
-);
-router.get(
-  "/:financialGoalId/user/:userId",
-  validateRequest({
-    params: z.object({
-      userId: z.string().uuid(),
       financialGoalId: z.string().uuid(),
     }),
   }),
   getFinancialGoalById
 );
-router.post(
-  "/user/:userId",
-  validateRequest({
-    params: z.object({
-      userId: z.string().uuid(),
-    }),
-  }),
-  createFinancialGoal
-);
+
+router.post("/user/:userId", authMiddleware, createFinancialGoal);
+
 router.put(
   "/:financialGoalId/user/:userId",
+  authMiddleware,
+  isOwerMiddleware,
   validateRequest({
     params: z.object({
-      userId: z.string().uuid(),
       financialGoalId: z.string().uuid(),
+      userId: z.string().uuid(),
     }),
   }),
-  getFinancialGoalById,
   updateFinancialGoalById
 );
+
 router.delete(
   "/:financialGoalId/user/:userId",
+  authMiddleware,
+  isOwerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
       financialGoalId: z.string().uuid(),
     }),
   }),
-  getFinancialGoalById,
   deleteFinancialGoalById
 );
 

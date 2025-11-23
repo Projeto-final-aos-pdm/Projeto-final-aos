@@ -30,10 +30,15 @@ export const transactionTable = pgTable("Transaction", {
     .$defaultFn(() => new Date()),
   account_id: uuid()
     .notNull()
-    .references(() => accountTable.id),
+    .references(() => accountTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
   category_id: uuid()
     .notNull()
-    .references(() => categoryTable.id),
+    .references(() => categoryTable.id, {
+      onUpdate: "cascade",
+    }),
 });
 
 export const transactionRelations = relations(transactionTable, ({ one }) => ({
