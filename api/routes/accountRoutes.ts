@@ -1,23 +1,71 @@
 import { Router } from "express";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
+import z from "zod";
+import { validateRequest } from "zod-express-middleware";
 import {
-    getAllAccounts,
-    getAccountById,
-    createAccount,
-    updateAccount,
-    deleteAccount,
+  createAccount,
+  deleteAccount,
+  getAccountById,
+  getAllAccounts,
+  updateAccount,
 } from "../controllers/accountController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
+import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware.js";
 
 const router = Router();
-router.use(authMiddleware);
 
-router.route("/users/:userId/contas")
-    .get(getAllAccounts)
-    .post(createAccount);
+router.use(authMiddleware, isOwerMiddleware);
 
-router.route("/contas/:accountId")
-    .get(getAccountById)
-    .put(updateAccount)
-    .delete(deleteAccount);
+router.get(
+  "/user/:userId",
+  validateRequest({
+    params: z.object({
+      userId: z.string().uuid(),
+    }),
+  }),
+  getAllAccounts
+);
+
+router.get(
+  "/:accountId/user/:userId",
+  validateRequest({
+    params: z.object({
+      accountId: z.string().uuid(),
+      userId: z.string().uuid(),
+    }),
+  }),
+  getAccountById
+);
+
+router.post(
+  "/user/:userId",
+  validateRequest({
+    params: z.object({
+      userId: z.string().uuid(),
+    }),
+  }),
+  createAccount
+);
+
+router.put(
+  ":accountId/user/:userId",
+  validateRequest({
+    params: z.object({
+      accountId: z.string().uuid(),
+      userId: z.string().uuid(),
+    }),
+  }),
+  updateAccount
+);
+
+router.delete(
+  ":accountId/user/:userId",
+  validateRequest({
+    params: z.object({
+      accountId: z.string().uuid(),
+      userId: z.string().uuid(),
+    }),
+  }),
+  deleteAccount
+);
 
 export default router;

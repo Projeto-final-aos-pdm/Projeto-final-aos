@@ -10,7 +10,9 @@ import {
 
 const getAllMonthlyBudget = async (req: Request, res: Response) => {
   try {
-    const monthlyBudgetList = await getAllMonthlyBudgetService();
+    const userId = req.params.userId as string;
+
+    const monthlyBudgetList = await getAllMonthlyBudgetService(userId);
 
     res.status(200).send({
       message: "Requet sucessfully",
@@ -27,16 +29,13 @@ const getAllMonthlyBudget = async (req: Request, res: Response) => {
 
 const getMonthlyBudgetById = async (req: Request, res: Response) => {
   try {
-    const { monthlyBudgetId } = req.params;
+    const userId = req.params.userId as string;
 
-    if (!monthlyBudgetId) {
-      return res.status(400).send({
-        message: "Please insert monthlyBudgetId",
-      });
-    }
+    const monthlyBudgetId = req.params.monthlyBudgetId as string;
 
     const monthlyBudgetData = await getMonthlyBudgetByIdService(
-      monthlyBudgetId
+      monthlyBudgetId,
+      userId
     );
 
     if (!monthlyBudgetData) {
