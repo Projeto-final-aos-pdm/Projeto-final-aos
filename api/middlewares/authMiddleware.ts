@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import env from "../env.js";
 import { getTokenByJWTTokenService } from "../services/blackListService.js";
 
