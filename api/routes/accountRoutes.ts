@@ -41,7 +41,7 @@ router.put(
 );
 
 router.delete(
-  ":accountId/user/:userId",
+  "/:accountId/user/:userId",
   authMiddleware,
   isOwerMiddleware,
   validateRequest({
