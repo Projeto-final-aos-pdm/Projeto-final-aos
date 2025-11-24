@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
-import { transactionTable } from "./transaction";
+import { transactionTable } from "./transaction.js";
 
 export const categoryType = ["fix", "variable"] as const;
 export const categoryTypeEnum = pgEnum("categoryTypeEnum", categoryType);

@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { numeric, pgEnum, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
-import { userTable } from "./user";
+import { userTable } from "./user.js";
 
 export const monthType = [
   "Jan",

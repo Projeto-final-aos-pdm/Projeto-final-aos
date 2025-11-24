@@ -7,7 +7,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import { userTable } from "./user";
+import { userTable } from "./user.js";
 
 export const financialGoalTable = pgTable("Financial_Goal", {
   id: uuid().defaultRandom().primaryKey(),

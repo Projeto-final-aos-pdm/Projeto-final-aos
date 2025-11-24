@@ -8,8 +8,8 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import { accountTable } from "./account";
-import { categoryTable } from "./category";
+import { accountTable } from "./account.js";
+import { categoryTable } from "./category.js";
 
 export const transactionType = ["income", "expense"] as const;
 export const transactionTypeEnum = pgEnum(

@@ -1,8 +1,8 @@
 import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
-import { accountTable } from "./account";
-import { financialGoalTable } from "./financialGoal";
-import { monthlyBudgetTable } from "./monthlyBudget";
+import { accountTable } from "./account.js";
+import { financialGoalTable } from "./financialGoal.js";
+import { monthlyBudgetTable } from "./monthlyBudget.js";
 
 export const userTable = pgTable("User", {
   id: uuid().defaultRandom().primaryKey(),

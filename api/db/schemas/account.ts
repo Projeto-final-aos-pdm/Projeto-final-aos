@@ -8,8 +8,8 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import { transactionTable } from "./transaction";
-import { userTable } from "./user";
+import { transactionTable } from "./transaction.js";
+import { userTable } from "./user.js";
 
 export const accountTypeValues = [
   "checking",
