@@ -1,12 +1,12 @@
 import type { Request, Response } from "express";
-import { monthlyBudgetDTO } from "../dto/monthlyBudgetDTO";
+import { monthlyBudgetDTO } from "../dto/monthlyBudgetDTO.js";
 import {
   createMonthlyBudgetService,
   deleteMonthlyBudgetService,
   getAllMonthlyBudgetService,
   getMonthlyBudgetByIdService,
   updateMonthlyBudgetService,
-} from "../services/monthlyBudgetService";
+} from "../services/monthlyBudgetService.js";
 
 const getAllMonthlyBudget = async (req: Request, res: Response) => {
   try {

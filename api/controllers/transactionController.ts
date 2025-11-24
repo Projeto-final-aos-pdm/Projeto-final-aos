@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { transactionDTO } from "../dto/transationDTO";
+import { transactionDTO } from "../dto/transationDTO.js";
 import {
   createTransactionService,
   deleteTransactionByIdService,
@@ -7,7 +7,7 @@ import {
   getAllTransactionsService,
   getTransactionByIdService,
   updateTransactionByIdService,
-} from "../services/transactionService";
+} from "../services/transactionService.js";
 
 const getAllTransaction = async (req: Request, res: Response) => {
   try {
