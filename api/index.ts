@@ -14,7 +14,7 @@ server.listen(env.PORT, () => {
 });
 
 server.get("/", (req, res) => {
-  res.send("Hello");
+  res.send("Welcome the finnancial API!!");
 });
 
 // Rotas públicas (sem autenticação)
