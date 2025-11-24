@@ -1,147 +1,165 @@
 import type { Request, Response } from "express";
+import { ZodError } from "zod";
 import { accountDTO } from "../dto/accountDTO.js";
 import {
   createAccountService,
-  deleteAccountByIdService,
+  deleteAccountService,
   getAccountByIdService,
   getAllAccountsService,
-  updateAccountByIdService,
+  getAllTransactionsByAccountService,
+  updateAccountService,
 } from "../services/accountService.js";
 
 const getAllAccounts = async (req: Request, res: Response) => {
   try {
-    const accountList = await getAllAccountsService();
+    const accounts = await getAllAccountsService();
 
     res.status(200).send({
-      message: "Request sucessfully",
-      data: accountList,
+      message: "Contas listadas com sucesso.",
+      data: accounts,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
+    res.status(500).send({ message: "Erro ao listar contas.", erro: error });
   }
 };
 
 const getAccountById = async (req: Request, res: Response) => {
   try {
-    const { accountId } = req.params;
+    const accountId = req.params.accountId!;
 
-    if (!accountId) {
-      return res.status(400).send({
-        message: "Prease insert accountId",
-      });
-    }
+    const account = await getAccountByIdService(accountId);
 
-    const accountData = await getAccountByIdService(accountId);
-
-    if (!accountData) {
-      return res.status(404).send({
-        message: "Account not found",
-      });
+    if (!account) {
+      return res
+        .status(404)
+        .send({ message: "Conta não encontrada ou acesso negado." });
     }
 
     res.status(200).send({
-      message: "Request sucessfully, acoount found!!",
-      data: accountData,
+      message: "Conta encontrada com sucesso.",
+      data: account,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
+    res.status(500).send({ message: "Erro ao buscar conta.", erro: error });
   }
 };
 
 const createAccount = async (req: Request, res: Response) => {
   try {
-    const parsedData = accountDTO.parse(req.body);
+    const userId = req.params.userId as string;
 
-    const accountData = await createAccountService(parsedData);
+    const validatedData = accountDTO.parse(req.body);
+
+    const newAccount = await createAccountService(validatedData, userId);
 
     res.status(201).send({
-      message: "Request sucessfully, created account!!",
-      data: accountData,
+      message: "Conta criada com sucesso.",
+      data: newAccount,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
+    if (error instanceof ZodError) {
+      return res
+        .status(400)
+        .send({ message: "Dados de entrada inválidos.", errors: error.issues });
+    }
+    res.status(500).send({ message: "Erro ao criar conta.", erro: error });
   }
 };
 
-const updateAccountById = async (req: Request, res: Response) => {
+const updateAccount = async (req: Request, res: Response) => {
   try {
-    const { accountId } = req.params;
+    const userId = req.userId as string;
+    const accountId = req.params.accountId as string;
 
-    if (!accountId) {
-      return res.status(400).send({
-        message: "Prease insert accountId",
-      });
+    const validatedData = accountDTO.parse(req.body);
+
+    if (Object.keys(validatedData).length === 0) {
+      return res
+        .status(400)
+        .send({ message: "Nenhum dado fornecido para atualização." });
     }
-    const verifyExistAccountData = await getAccountByIdService(accountId);
 
-    if (!verifyExistAccountData) {
+    const verifyAccountExist = await getAccountByIdService(accountId);
+
+    if (!verifyAccountExist) {
       return res.status(404).send({
         message: "Account not found",
       });
     }
 
-    const parsedData = accountDTO.partial().parse(req.body);
+    const result = await updateAccountService(accountId, userId, validatedData);
 
-    await updateAccountByIdService(accountId, parsedData);
+    if (!result || result.length === 0) {
+      return res
+        .status(404)
+        .send({ message: "Conta não encontrada ou acesso negado." });
+    }
 
-    res.status(204).send();
+    res
+      .status(200)
+      .send({ message: "Conta atualizada com sucesso.", data: result[0] });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
+    if (error instanceof ZodError) {
+      return res
+        .status(400)
+        .send({ message: "Dados de entrada inválidos.", errors: error.issues });
+    }
+    res.status(500).send({ message: "Erro ao atualizar conta.", erro: error });
   }
 };
 
-const deleteAccountById = async (req: Request, res: Response) => {
+const deleteAccount = async (req: Request, res: Response) => {
   try {
-    const { accountId } = req.params;
+    const accountId = req.params.accountId!;
 
-    if (!accountId) {
-      return res.status(400).send({
-        message: "Prease insert accountId",
-      });
-    }
+    const verifyAccountExist = await getAccountByIdService(accountId);
 
-    const verifyExistAccountData = await getAccountByIdService(accountId);
-
-    if (!verifyExistAccountData) {
+    if (!verifyAccountExist) {
       return res.status(404).send({
         message: "Account not found",
       });
     }
 
-    await deleteAccountByIdService(accountId);
+    await deleteAccountService(accountId);
 
     res.status(200).send({
-      message: "Request sucessfully, account delete",
+      message: "Conta e transações relacionadas deletadas com sucesso.",
+    });
+  } catch (error: any) {
+    if (error.message.includes("acesso negado")) {
+      return res
+        .status(404)
+        .send({ message: "Conta não encontrada ou acesso negado." });
+    }
+    res.status(500).send({ message: "Erro ao deletar conta.", erro: error });
+  }
+};
+
+const getAllTransactionsByAccount = async (req: Request, res: Response) => {
+  try {
+    const accountId = req.params.accountId!;
+
+    const transactionsList = getAllTransactionsByAccountService(accountId);
+
+    res.status(200).send({
+      message: "Request sucessfully",
+      data: transactionsList,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({
-      message: "Server Error",
-      erro: error,
-    });
+    if (error instanceof ZodError) {
+      return res
+        .status(400)
+        .send({ message: "Dados de entrada inválidos.", errors: error.issues });
+    }
+    res.status(500).send({ message: "Erro ao atualizar conta.", erro: error });
   }
 };
 
 export {
   createAccount,
-  deleteAccountById,
+  deleteAccount,
   getAccountById,
   getAllAccounts,
-  updateAccountById,
+  getAllTransactionsByAccount,
+  updateAccount,
 };

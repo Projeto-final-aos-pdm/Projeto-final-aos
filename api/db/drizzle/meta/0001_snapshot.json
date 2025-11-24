@@ -1,6 +1,6 @@
 {
-  "id": "66429f97-c16d-4f35-868f-bc9c92eb38ad",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "a0c65eee-0e26-4a2c-b4ae-a20ae75c8a9c",
+  "prevId": "66429f97-c16d-4f35-868f-bc9c92eb38ad",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -78,6 +78,39 @@
           "onUpdate": "cascade"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.blackList": {
+      "name": "blackList",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "token": {
+          "name": "token",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
