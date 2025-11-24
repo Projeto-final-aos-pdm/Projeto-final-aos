@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { database } from "../db";
-import { blackListTable } from "../db/schemas";
-import type { BlackListDTO } from "../dto/blackListDTO";
+import { database } from "../db/index.js";
+import { blackListTable } from "../db/schemas/index.js";
+import type { BlackListDTO } from "../dto/blackListDTO.js";
 
 const getTokenByJWTTokenService = async (JWTToken: string) => {
   return await database.query.blackListTable.findFirst({
