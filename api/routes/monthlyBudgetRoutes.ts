@@ -51,6 +51,8 @@ router.put(
 
 router.delete(
   "/:monthlyBudgetId/user/:userId",
+  authMiddleware,
+  isOwerMiddleware,
   validateRequest({
     params: z.object({
       monthlyBudgetId: z.string().uuid(),
