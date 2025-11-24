@@ -1,10 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import env from "../env.js";
+import { getTokenByJWTTokenService } from "../services/blackListService.js";
 
 const SECRET_KEY: string = env.SECRET_KEY || "nossa_chave_secreta_padrao";
 
-export const authMiddleware = (
+export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -23,6 +24,14 @@ export const authMiddleware = (
     return res
       .status(401)
       .send({ message: "Acesso negado: Token mal formado." });
+  }
+
+  const verifyBlackList = await getTokenByJWTTokenService(token);
+
+  if (verifyBlackList) {
+    return res
+      .status(401)
+      .send({ message: "Acesso negado: Token inválido ou expirado." });
   }
 
   try {

@@ -34,7 +34,8 @@ const updateUserByIdService = async (
   return await database
     .update(userTable)
     .set(data)
-    .where(eq(userTable.id, userId));
+    .where(eq(userTable.id, userId))
+    .returning();
 };
 
 const deleteUserByIdService = async (userId: string) => {
