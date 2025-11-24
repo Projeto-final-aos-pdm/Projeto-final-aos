@@ -1,5 +1,5 @@
 import z from "zod";
-import { transactionType } from "../db/schemas";
+import { transactionType } from "../db/schemas/index.js";
 
 export const transactionDTO = z.object({
   type: z.enum(transactionType),

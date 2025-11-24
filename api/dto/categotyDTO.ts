@@ -1,5 +1,5 @@
 import z from "zod";
-import { categoryType } from "../db/schemas";
+import { categoryType } from "../db/schemas/index.js";
 
 export const categoryDTO = z.object({
     name: z.string().nonempty(),
