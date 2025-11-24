@@ -7,8 +7,8 @@ import {
   getAllMonthlyBudget,
   getMonthlyBudgetById,
   updateMonthlyBudget,
-} from "../controllers/monthlyBudgetController";
-import { isOwnerMiddleware } from "../middlewares/isOwnerMiddleware";
+} from "../controllers/monthlyBudgetController.js";
+import { isOwnerMiddleware } from "../middlewares/isOwnerMiddleware.js";
 
 const router = Router();
 

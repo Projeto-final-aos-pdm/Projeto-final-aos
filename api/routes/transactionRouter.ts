@@ -8,8 +8,8 @@ import {
   getAllTransactionsByCategoryId,
   getTransactionById,
   updateTransactionById,
-} from "../controllers/transactionController";
-import { isOwnerMiddleware } from "../middlewares/isOwnerMiddleware";
+} from "../controllers/transactionController.js";
+import { isOwnerMiddleware } from "../middlewares/isOwnerMiddleware.js";
 
 const router = Router();
 
