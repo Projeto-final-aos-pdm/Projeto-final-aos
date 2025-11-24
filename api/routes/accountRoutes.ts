@@ -6,6 +6,7 @@ import {
   deleteAccount,
   getAccountById,
   getAllAccounts,
+  getAllTransactionsByAccount,
   updateAccount,
 } from "../controllers/accountController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
@@ -51,6 +52,19 @@ router.delete(
     }),
   }),
   deleteAccount
+);
+
+router.get(
+  ":accountId/transactions/user/:userId",
+  authMiddleware,
+  isOwerMiddleware,
+  validateRequest({
+    params: z.object({
+      accountId: z.string().uuid(),
+      userId: z.string().uuid(),
+    }),
+  }),
+  getAllTransactionsByAccount
 );
 
 export default router;

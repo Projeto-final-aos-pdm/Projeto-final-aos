@@ -5,6 +5,7 @@ import {
   createTransaction,
   deleteTransactionById,
   getAllTransaction,
+  getAllTransactionsByCategoryId,
   getTransactionById,
   updateTransactionById,
 } from "../controllers/transactionController";
@@ -12,7 +13,6 @@ import { authMiddleware } from "../middlewares/authMiddleware";
 import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware";
 
 const router = Router();
-// router.use(authMiddleware, isOwerMiddleware);
 
 router.get("/", getAllTransaction);
 
@@ -49,6 +49,7 @@ router.put(
   }),
   updateTransactionById
 );
+
 router.delete(
   "/:transactionId/user/:userId",
   authMiddleware,
@@ -62,4 +63,16 @@ router.delete(
   deleteTransactionById
 );
 
+router.get(
+  "/category/:categoryId/user/:userId",
+  authMiddleware,
+  isOwerMiddleware,
+  validateRequest({
+    params: z.object({
+      categoryId: z.string().uuid(),
+      userId: z.string().uuid(),
+    }),
+  }),
+  getAllTransactionsByCategoryId
+);
 export default router;
