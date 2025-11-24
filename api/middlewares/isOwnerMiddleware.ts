@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 
-export const isOwerMiddleware = (
+export const isOwnerMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction

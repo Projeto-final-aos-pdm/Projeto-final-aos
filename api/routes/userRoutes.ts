@@ -15,7 +15,7 @@ import {
   updateUserById,
 } from "../controllers/userController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware.js";
+import { isOwnerMiddleware } from "../middlewares/isOwnerMiddleware.js";
 
 const router = Router();
 
@@ -24,7 +24,7 @@ router.get("/", getAllUsers);
 router.get(
   "/:userId",
   authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -33,12 +33,10 @@ router.get(
   getUserById
 );
 
-router.post("/", createUser);
-
 router.put(
   "/:userId",
   authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -50,7 +48,7 @@ router.put(
 router.delete(
   "/:userId",
   authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -62,7 +60,7 @@ router.delete(
 router.get(
   "/:userId/monthly-budget",
   authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -74,7 +72,7 @@ router.get(
 router.get(
   "/:userId/monthly-budget/:monthlyBudgetId",
   authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -86,7 +84,7 @@ router.get(
 router.get(
   "/:userId/financial-goal",
   authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -98,7 +96,7 @@ router.get(
 router.get(
   "/:userId/financial-goal/:financialGoalId",
   authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -110,7 +108,7 @@ router.get(
 router.get(
   "/:userId/accounts",
   authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -122,7 +120,7 @@ router.get(
 router.get(
   "/:userId/accounts/:accountsId",
   authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),

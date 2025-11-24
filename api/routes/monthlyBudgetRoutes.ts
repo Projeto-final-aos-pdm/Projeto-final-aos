@@ -8,8 +8,7 @@ import {
   getMonthlyBudgetById,
   updateMonthlyBudget,
 } from "../controllers/monthlyBudgetController";
-import { authMiddleware } from "../middlewares/authMiddleware";
-import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware";
+import { isOwnerMiddleware } from "../middlewares/isOwnerMiddleware";
 
 const router = Router();
 
@@ -27,7 +26,6 @@ router.get(
 
 router.post(
   "/user/:userId",
-  authMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -38,8 +36,7 @@ router.post(
 
 router.put(
   "/:monthlyBudgetId/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       monthlyBudgetId: z.string().uuid(),
@@ -51,8 +48,7 @@ router.put(
 
 router.delete(
   "/:monthlyBudgetId/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       monthlyBudgetId: z.string().uuid(),

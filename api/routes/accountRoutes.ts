@@ -9,8 +9,7 @@ import {
   getAllTransactionsByAccount,
   updateAccount,
 } from "../controllers/accountController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware.js";
+import { isOwnerMiddleware } from "../middlewares/isOwnerMiddleware.js";
 
 const router = Router();
 
@@ -26,12 +25,11 @@ router.get(
   getAccountById
 );
 
-router.post("/user/:userId", authMiddleware, createAccount);
+router.post("/user/:userId", createAccount);
 
 router.put(
   "/:accountId/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       accountId: z.string().uuid(),
@@ -43,8 +41,7 @@ router.put(
 
 router.delete(
   "/:accountId/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       accountId: z.string().uuid(),
@@ -56,8 +53,7 @@ router.delete(
 
 router.get(
   ":accountId/transactions/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       accountId: z.string().uuid(),

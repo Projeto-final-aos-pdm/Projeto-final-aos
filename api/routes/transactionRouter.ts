@@ -9,8 +9,7 @@ import {
   getTransactionById,
   updateTransactionById,
 } from "../controllers/transactionController";
-import { authMiddleware } from "../middlewares/authMiddleware";
-import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware";
+import { isOwnerMiddleware } from "../middlewares/isOwnerMiddleware";
 
 const router = Router();
 
@@ -28,7 +27,6 @@ router.get(
 
 router.post(
   "/user/:userId",
-  authMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
@@ -39,8 +37,7 @@ router.post(
 
 router.put(
   "/:transactionId/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       transactionId: z.string().uuid(),
@@ -52,8 +49,7 @@ router.put(
 
 router.delete(
   "/:transactionId/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       transactionId: z.string().uuid(),
@@ -65,8 +61,7 @@ router.delete(
 
 router.get(
   "/category/:categoryId/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       categoryId: z.string().uuid(),

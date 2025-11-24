@@ -8,8 +8,7 @@ import {
   getFinancialGoalById,
   updateFinancialGoalById,
 } from "../controllers/financialGoalController.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { isOwerMiddleware } from "../middlewares/isOwnerMiddleware.js";
+import { isOwnerMiddleware } from "../middlewares/isOwnerMiddleware.js";
 
 const router = Router();
 
@@ -25,12 +24,11 @@ router.get(
   getFinancialGoalById
 );
 
-router.post("/user/:userId", authMiddleware, createFinancialGoal);
+router.post("/user/:userId", createFinancialGoal);
 
 router.put(
   "/:financialGoalId/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       financialGoalId: z.string().uuid(),
@@ -42,8 +40,7 @@ router.put(
 
 router.delete(
   "/:financialGoalId/user/:userId",
-  authMiddleware,
-  isOwerMiddleware,
+  isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
