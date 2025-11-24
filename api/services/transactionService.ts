@@ -34,9 +34,16 @@ const deleteTransactionByIdService = async (transactionId: string) => {
     .where(eq(transactionTable.id, transactionId));
 };
 
+const getAllTransactionsByCategoryIdService = async (categoryId: string) => {
+  return await database.query.transactionTable.findMany({
+    where: eq(transactionTable.category_id, categoryId),
+  });
+};
+
 export {
   createTransactionService,
   deleteTransactionByIdService,
+  getAllTransactionsByCategoryIdService,
   getAllTransactionsService,
   getTransactionByIdService,
   updateTransactionByIdService,

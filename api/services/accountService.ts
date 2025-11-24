@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { database } from "../db/index.js";
 import { accountTable } from "../db/schemas/account.js";
+import { transactionTable } from "../db/schemas/transaction.js";
 import type { AccountDTO } from "../dto/accountDTO.js";
 
 const getAllAccountsService = async () => {
@@ -43,13 +44,17 @@ const deleteAccountService = async (accountId: string) => {
     .where(eq(accountTable.id, accountId));
 };
 
-/*
-Pegar todas as transações de uma conta*/
+const getAllTransactionsByAccountService = async (accountId: string) => {
+  return await database.query.transactionTable.findMany({
+    where: eq(transactionTable.account_id, accountId),
+  });
+};
 
 export {
   createAccountService,
   deleteAccountService,
   getAccountByIdService,
   getAllAccountsService,
+  getAllTransactionsByAccountService,
   updateAccountService,
 };

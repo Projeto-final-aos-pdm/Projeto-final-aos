@@ -6,6 +6,7 @@ import {
   deleteAccountService,
   getAccountByIdService,
   getAllAccountsService,
+  getAllTransactionsByAccountService,
   updateAccountService,
 } from "../services/accountService.js";
 
@@ -109,8 +110,7 @@ const updateAccount = async (req: Request, res: Response) => {
 
 const deleteAccount = async (req: Request, res: Response) => {
   try {
-    const userId = req.userId as string;
-    const accountId = req.params.accountId as string;
+    const accountId = req.params.accountId!;
 
     const verifyAccountExist = await getAccountByIdService(accountId);
 
@@ -135,10 +135,31 @@ const deleteAccount = async (req: Request, res: Response) => {
   }
 };
 
+const getAllTransactionsByAccount = async (req: Request, res: Response) => {
+  try {
+    const accountId = req.params.accountId!;
+
+    const transactionsList = getAllTransactionsByAccountService(accountId);
+
+    res.status(200).send({
+      message: "Request sucessfully",
+      data: transactionsList,
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res
+        .status(400)
+        .send({ message: "Dados de entrada inválidos.", errors: error.issues });
+    }
+    res.status(500).send({ message: "Erro ao atualizar conta.", erro: error });
+  }
+};
+
 export {
   createAccount,
   deleteAccount,
   getAccountById,
   getAllAccounts,
+  getAllTransactionsByAccount,
   updateAccount,
 };

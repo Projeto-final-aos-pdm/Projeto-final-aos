@@ -3,6 +3,7 @@ import { transactionDTO } from "../dto/transationDTO";
 import {
   createTransactionService,
   deleteTransactionByIdService,
+  getAllTransactionsByCategoryIdService,
   getAllTransactionsService,
   getTransactionByIdService,
   updateTransactionByIdService,
@@ -155,10 +156,32 @@ const deleteTransactionById = async (req: Request, res: Response) => {
   }
 };
 
+const getAllTransactionsByCategoryId = async (req: Request, res: Response) => {
+  try {
+    const categoryId = req.params.categoryId!;
+
+    const transactionList = await getAllTransactionsByCategoryIdService(
+      categoryId
+    );
+
+    res.status(200).send({
+      message: "Request sucessfully",
+      data: transactionList,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
+};
+
 export {
   createTransaction,
   deleteTransactionById,
   getAllTransaction,
+  getAllTransactionsByCategoryId,
   getTransactionById,
   updateTransactionById,
 };
