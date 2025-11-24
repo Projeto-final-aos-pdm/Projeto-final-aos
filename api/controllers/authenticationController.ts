@@ -2,7 +2,9 @@ import bcrypt from "bcryptjs";
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { authenticationDTO } from "../dto/authenticationDTO.js";
+import { blackListDTO } from "../dto/blackListDTO.js";
 import env from "../env.js";
+import { addTokenFromBlackListService } from "../services/blackListService.js";
 import { getUserByEmail } from "../services/userService.js";
 
 const authentication = async (req: Request, res: Response) => {
@@ -57,4 +59,23 @@ const authentication = async (req: Request, res: Response) => {
   }
 };
 
-export { authentication };
+const logout = async (req: Request, res: Response) => {
+  try {
+    const parsedData = blackListDTO.parse(req.body);
+
+    await addTokenFromBlackListService(parsedData);
+
+    res.status(200).send({
+      message: "Logout sucessfully!!-",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).send({
+      message: "Server Error",
+      erro: error,
+    });
+  }
+};
+
+export { authentication, logout };
