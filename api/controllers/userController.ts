@@ -47,6 +47,7 @@ const getUserById = async (req: Request, res: Response) => {
 
     res.status(200).send({
       message: "Request sucessfuly, user found!!",
+      data: userData,
     });
   } catch (error) {
     console.error(error);
