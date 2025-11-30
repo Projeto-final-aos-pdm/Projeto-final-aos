@@ -61,7 +61,7 @@ const createTransaction = async (req: Request, res: Response) => {
   try {
     const parsedData = transactionDTO.parse(req.body);
 
-    const transactionData = createTransactionService(parsedData);
+    const transactionData = await createTransactionService(parsedData);
 
     if (!transactionData) {
       return res.status(404).send({
