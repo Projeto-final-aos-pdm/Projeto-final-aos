@@ -1,3 +1,13 @@
+# Integrantes da equipe
+
+- Arthur Levy Batista Vieira (853755)
+- Beatriz Suelen R. da Costa (854108)
+- Cauã Gabriel Nonato Peres (853751)
+- Giullya Vitória da S. Gomes (854107)
+- Jansen Yuki Cruz Okasaki (853837)
+- Marcela Maria da Silva Dias (853790)
+- Marcos Filipe Gonçalves Capella (706)
+
 # Sistema de Gestão Financeira Pessoal
 
 API REST para gerenciamento de finanças pessoais com autenticação JWT, controle de orçamento mensal, metas financeiras e transações.
@@ -46,7 +56,7 @@ bun install
 ```
 
 3. **Configurar variáveis de ambiente:**
-Crie um arquivo `.env` na raiz do projeto:
+   Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/dbname
@@ -125,13 +135,15 @@ Criar nova conta de usuário.
 ```json
 {
   "message": "Request sucessfully, created user",
-  "data": [{
-    "id": "550e8400-e29b-41d4-a716-446655440000",
-    "name": "João Silva",
-    "email": "joao@example.com",
-    "created_at": "2025-11-24T10:30:00.000Z",
-    "updated_at": "2025-11-24T10:30:00.000Z"
-  }]
+  "data": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "created_at": "2025-11-24T10:30:00.000Z",
+      "updated_at": "2025-11-24T10:30:00.000Z"
+    }
+  ]
 }
 ```
 
@@ -283,14 +295,16 @@ Authorization: Bearer {seu_token_jwt}
 ```json
 {
   "message": "Request sucessfully, created account",
-  "data": [{
-    "id": "new-account-uuid",
-    "bank": "Nubank",
-    "type": "digital",
-    "balance": "1500.00",
-    "is_active": true,
-    "user_id": "user-uuid"
-  }]
+  "data": [
+    {
+      "id": "new-account-uuid",
+      "bank": "Nubank",
+      "type": "digital",
+      "balance": "1500.00",
+      "is_active": true,
+      "user_id": "user-uuid"
+    }
+  ]
 }
 ```
 
@@ -368,13 +382,15 @@ Authorization: Bearer {seu_token_jwt}
 ```json
 {
   "message": "Request sucessfully, created transaction",
-  "data": [{
-    "id": "new-transaction-uuid",
-    "type": "expense",
-    "value": "150.50",
-    "date": "2025-11-24T00:00:00.000Z",
-    "description": "Compras no supermercado"
-  }]
+  "data": [
+    {
+      "id": "new-transaction-uuid",
+      "type": "expense",
+      "value": "150.50",
+      "date": "2025-11-24T00:00:00.000Z",
+      "description": "Compras no supermercado"
+    }
+  ]
 }
 ```
 
@@ -437,11 +453,13 @@ Authorization: Bearer {seu_token_jwt}
 ```json
 {
   "message": "Request sucessfully, created category",
-  "data": [{
-    "id": "new-category-uuid",
-    "name": "Moradia",
-    "type": "fix"
-  }]
+  "data": [
+    {
+      "id": "new-category-uuid",
+      "name": "Moradia",
+      "type": "fix"
+    }
+  ]
 }
 ```
 
@@ -497,13 +515,15 @@ Authorization: Bearer {seu_token_jwt}
 ```json
 {
   "message": "Request sucessfully, created financial goal",
-  "data": [{
-    "id": "new-goal-uuid",
-    "description": "Viagem para Europa",
-    "target_value": "20000.00",
-    "current_value": "5000.00",
-    "deadline": "2026-06-30T00:00:00.000Z"
-  }]
+  "data": [
+    {
+      "id": "new-goal-uuid",
+      "description": "Viagem para Europa",
+      "target_value": "20000.00",
+      "current_value": "5000.00",
+      "deadline": "2026-06-30T00:00:00.000Z"
+    }
+  ]
 }
 ```
 
@@ -565,13 +585,15 @@ Authorization: Bearer {seu_token_jwt}
 ```json
 {
   "message": "Request sucessfully, created monthly budget",
-  "data": [{
-    "id": "new-budget-uuid",
-    "month": "Dec",
-    "year": "2025",
-    "limit_value": "6000.00",
-    "spent_value": "0.00"
-  }]
+  "data": [
+    {
+      "id": "new-budget-uuid",
+      "month": "Dec",
+      "year": "2025",
+      "limit_value": "6000.00",
+      "spent_value": "0.00"
+    }
+  ]
 }
 ```
 
