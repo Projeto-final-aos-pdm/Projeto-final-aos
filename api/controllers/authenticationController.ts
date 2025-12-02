@@ -3,6 +3,7 @@ import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { authenticationDTO } from "../dto/authenticationDTO.js";
 import { blackListDTO } from "../dto/blackListDTO.js";
+import type { JwtDTO } from "../dto/jwtDTO.js";
 import env from "../env.js";
 import { addTokenFromBlackListService } from "../services/blackListService.js";
 import { getUserByEmail } from "../services/userService.js";
@@ -78,4 +79,28 @@ const logout = async (req: Request, res: Response) => {
   }
 };
 
-export { authentication, logout };
+const decodeToken = async (req: Request, res: Response) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).send({ message: "Missing authorization header" });
+  }
+
+  const token = authHeader.replace("Bearer ", "").trim();
+
+  try {
+    const decoded = jwt.verify(token, env.SECRET_KEY) as JwtDTO;
+
+    res.status(200).send({
+      message: "Request sucessfully",
+      data: decoded.userId,
+    });
+  } catch (error) {
+    res.status(401).send({
+      message: "Invalid or expired token",
+      error,
+    });
+  }
+};
+
+export { authentication, decodeToken, logout };
