@@ -37,6 +37,7 @@ export const transactionTable = pgTable("Transaction", {
   category_id: uuid()
     .notNull()
     .references(() => categoryTable.id, {
+      onDelete: "cascade",
       onUpdate: "cascade",
     }),
 });

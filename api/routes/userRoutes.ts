@@ -2,7 +2,6 @@ import { Router } from "express";
 import z from "zod";
 import { validateRequest } from "zod-express-middleware";
 import {
-  createUser,
   deleteUserById,
   getAccountByIdAndUserId,
   getAllAccountsByUserId,
@@ -124,6 +123,7 @@ router.get(
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
+      accountsId: z.string().uuid(),
     }),
   }),
   getAccountByIdAndUserId
