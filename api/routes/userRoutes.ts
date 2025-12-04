@@ -117,13 +117,13 @@ router.get(
 );
 
 router.get(
-  "/:userId/accounts/:accountsId",
+  "/:userId/accounts/:accountId",
   authMiddleware,
   isOwnerMiddleware,
   validateRequest({
     params: z.object({
       userId: z.string().uuid(),
-      accountsId: z.string().uuid(),
+      accountId: z.string().uuid(),
     }),
   }),
   getAccountByIdAndUserId
