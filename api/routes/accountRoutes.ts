@@ -52,7 +52,7 @@ router.delete(
 );
 
 router.get(
-  ":accountId/transactions/user/:userId",
+  "/:accountId/transactions/user/:userId",
   isOwnerMiddleware,
   validateRequest({
     params: z.object({
