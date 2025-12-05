@@ -139,7 +139,9 @@ const getAllTransactionsByAccount = async (req: Request, res: Response) => {
   try {
     const accountId = req.params.accountId!;
 
-    const transactionsList = getAllTransactionsByAccountService(accountId);
+    const transactionsList = await getAllTransactionsByAccountService(
+      accountId
+    );
 
     res.status(200).send({
       message: "Request sucessfully",
